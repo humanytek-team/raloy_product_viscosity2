@@ -14,12 +14,17 @@ class ProductSupplierinfo(models.Model):
     pack_uom = fields.Char(
     )
     conversion_rate = fields.Float(
+        default=1,
     )
     variable_density = fields.Boolean(
     )
     supplier_cost = fields.Monetary(
         currency_field='currency_id',
     )
+
+    @api.onchange('price')
+    def _supplier_cost_from_price(self):
+        self.supplier_cost = self.price * self.conversion_rate
 
     @api.onchange('supplier_cost', 'conversion_rate')
     def _price_from_supplier_cost(self):

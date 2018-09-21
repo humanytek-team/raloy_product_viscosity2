@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+    <record id="viscosity_purchase_order_form" model="ir.ui.view">
+      <field name="name">viscosity.purchase.order.form</field>
+      <field name="model">purchase.order</field>
+      <field name="inherit_id" ref="purchase.purchase_order_form"/>
+      <field name="arch" type="xml">
+        <field name="price_subtotal" position="before">
+          <field name="supplier_qty"/>
+          <field name="purchase_uom"/>
+          <field name="pack"/>
+          <field name="pack_uom"/>
+          <field name="conversion_rate" attrs="{'readonly': [('variable_density', '=', False)]}"/>
+          <field name="variable_density"/>
+          <field name="supplier_cost"/>
+        </field>
+      </field>
+    </record>
+  </data>
+</odoo>

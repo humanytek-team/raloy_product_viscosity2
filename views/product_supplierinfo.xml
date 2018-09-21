@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+    <record id="product_viscosity_supplierinfo_tree_view" model="ir.ui.view">
+      <field name="name">product.viscosity.supplierinfo.tree</field>
+      <field name="model">product.supplierinfo</field>
+      <field name="inherit_id" ref="product.product_supplierinfo_tree_view"/>
+      <field name="arch" type="xml">
+        <field name="date_end" position="after">
+          <field name="purchase_uom"/>
+          <field name="pack"/>
+          <field name="pack_uom"/>
+          <field name="conversion_rate"/>
+          <field name="variable_density"/>
+          <field name="supplier_cost"/>
+        </field>
+      </field>
+    </record>
+
+    <record id="product_viscosity_supplierinfo_form_view" model="ir.ui.view">
+      <field name="name">product.viscosity.supplierinfo.form</field>
+      <field name="model">product.supplierinfo</field>
+      <field name="inherit_id" ref="product.product_supplierinfo_form_view"/>
+      <field name="arch" type="xml">
+        <xpath expr="//group" position="inside">
+          <group string="Viscosity">
+            <field name="purchase_uom"/>
+            <field name="pack"/>
+            <field name="pack_uom" attrs="{'required': [('pack', '>', 1)]}"/>
+            <field name="conversion_rate"/>
+            <field name="variable_density"/>
+            <field name="supplier_cost"/>
+          </group>
+        </xpath>
+      </field>
+    </record>
+  </data>
+</odoo>

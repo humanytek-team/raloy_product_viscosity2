@@ -1,4 +1,5 @@
 from odoo import api, fields, models
+import odoo.addons.decimal_precision as dp
 
 
 class ProductSupplierinfo(models.Model):
@@ -15,11 +16,13 @@ class ProductSupplierinfo(models.Model):
     )
     conversion_rate = fields.Float(
         default=1,
+        digits=dp.get_precision('Product Price'),
     )
     variable_density = fields.Boolean(
     )
     supplier_cost = fields.Monetary(
         currency_field='currency_id',
+        digits=dp.get_precision('Product Price'),
     )
 
     @api.onchange('price')

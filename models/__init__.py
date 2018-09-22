@@ -20,3 +20,4 @@
 
 from . import product_supplierinfo
 from . import purchase_order_line
+from . import stock_pack_operation

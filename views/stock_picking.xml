@@ -8,7 +8,7 @@
       <field name="arch" type="xml">
         <field name="product_qty" position="after">
           <field name="conversion_rate" attrs="{'readonly': [('variable_density', '=', False)]}"/>
-          <field name="variable_density"/>
+          <field name="variable_density" readonly="True"/>
           <field name="supplier_qty" readonly="True"/>
           <field name="supplier_qty_done"/>
         </field>

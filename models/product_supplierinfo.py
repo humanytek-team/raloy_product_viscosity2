@@ -25,6 +25,18 @@ class ProductSupplierinfo(models.Model):
         currency_field='currency_id',
         digits=dp.get_precision('Product Price'),
     )
+    supplier_min_qty = fields.Float(
+        compute="_get_supplier_min_qty",
+        inverse="_set_min_qty",
+    )
+
+    @api.onchange('min_qty')
+    def _get_supplier_min_qty(self):
+        self.supplier_min_qty = self.min_qty / (self.conversion_rate or 1)
+
+    @api.onchange('supplier_min_qty', 'conversion_rate')
+    def _set_min_qty(self):
+        self.min_qty = self.supplier_min_qty * self.conversion_rate
 
     @api.onchange('price')
     def _supplier_cost_from_price(self):

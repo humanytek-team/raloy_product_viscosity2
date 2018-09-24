@@ -30,6 +30,7 @@
             <field name="conversion_rate"/>
             <field name="variable_density"/>
             <field name="supplier_cost"/>
+            <field name="supplier_min_qty"/>
           </group>
         </xpath>
       </field>

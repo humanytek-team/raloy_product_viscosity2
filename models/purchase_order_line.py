@@ -56,7 +56,7 @@ class PurchaseOrderLine(models.Model):
             uom_id=self.product_uom)
         self.conversion_rate = seller.conversion_rate
         self.supplier_cost = seller.supplier_cost
-        self.supplier_qty = self.product_qty / self.conversion_rate
+        self.supplier_qty = self.product_qty / (self.conversion_rate or 1)
 
     @api.depends('product_qty')
     @api.one

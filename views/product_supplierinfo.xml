@@ -26,7 +26,7 @@
           <group string="Viscosity">
             <field name="purchase_uom"/>
             <field name="pack"/>
-            <field name="pack_uom" attrs="{'required': [('pack', '>', 1)]}"/>
+            <field name="pack_uom"/>
             <field name="conversion_rate"/>
             <field name="variable_density"/>
             <field name="supplier_cost"/>

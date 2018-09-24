@@ -13,6 +13,7 @@ class ProductSupplierinfo(models.Model):
         default=1,
     )
     pack_uom = fields.Char(
+        required=True,
     )
     conversion_rate = fields.Float(
         default=1,

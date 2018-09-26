@@ -38,6 +38,6 @@ class StockPackOperation(models.Model):
             date=fields.Date.context_today,
             uom_id=uom)
         vals['conversion_rate'] = seller.conversion_rate
-        vals['supplier_qty'] = vals['product_qty'] / seller.conversion_rate
+        vals['supplier_qty'] = vals['product_qty'] / (seller.conversion_rate or 1)
         vals['variable_density'] = seller.variable_density
         return super(StockPackOperation, self).create(vals)

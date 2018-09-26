@@ -20,7 +20,7 @@
 
 {
     'name': 'Raloy Product Viscosity 2',
-    'version': '1.4.1',
+    'version': '1.5.0',
     'author': 'Humanytek',
     'website': 'http://humanytek.com',
     'depends': [

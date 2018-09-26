@@ -17,6 +17,9 @@ class StockPackOperation(models.Model):
     supplier_qty_done = fields.Float(
         digits=dp.get_precision('Product Price'),
     )
+    picking_type_code = fields.Selection(
+        related='picking_id.picking_type_code',
+    )
 
     @api.onchange('conversion_rate', 'supplier_qty_done')
     def _onchange_conversion_rate(self):
@@ -30,14 +33,16 @@ class StockPackOperation(models.Model):
     def create(self, vals):
         vals = vals or {}
         picking = self.env['stock.picking'].browse(vals['picking_id'])
-        uom = self.env['product.uom'].browse(vals['product_uom_id'])
-        product = self.env['product.product'].browse(vals['product_id'])
-        seller = product._select_seller(
-            partner_id=picking.partner_id,
-            quantity=vals['product_qty'],
-            date=fields.Date.context_today,
-            uom_id=uom)
-        vals['conversion_rate'] = seller.conversion_rate
-        vals['supplier_qty'] = vals['product_qty'] / (seller.conversion_rate or 1)
-        vals['variable_density'] = seller.variable_density
+        if picking.picking_type_code == 'incoming':
+            picking = self.env['stock.picking'].browse(vals['picking_id'])
+            uom = self.env['product.uom'].browse(vals['product_uom_id'])
+            product = self.env['product.product'].browse(vals['product_id'])
+            seller = product._select_seller(
+                partner_id=picking.partner_id,
+                quantity=vals['product_qty'],
+                date=fields.Date.context_today,
+                uom_id=uom)
+            vals['conversion_rate'] = seller.conversion_rate
+            vals['supplier_qty'] = vals['product_qty'] / (seller.conversion_rate or 1)
+            vals['variable_density'] = seller.variable_density
         return super(StockPackOperation, self).create(vals)

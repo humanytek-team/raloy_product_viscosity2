@@ -54,8 +54,8 @@ class PurchaseOrderLine(models.Model):
             quantity=self.product_qty,
             date=self.order_id.date_order and self.order_id.date_order[:10],
             uom_id=self.product_uom)
-        self.conversion_rate = seller.conversion_rate
-        self.supplier_cost = seller.supplier_cost
+        self.conversion_rate = (seller and seller.conversion_rate) or 1
+        self.supplier_cost = (seller and seller.supplier_cost) or self.price_unit
         self.supplier_qty = self.product_qty / (self.conversion_rate or 1)
 
     @api.depends('product_qty')
@@ -69,14 +69,19 @@ class PurchaseOrderLine(models.Model):
             date=self.order_id.date_order and self.order_id.date_order[:10],
             uom_id=self.product_uom)
         self.update({
-            'purchase_uom': seller.purchase_uom.id,
-            'pack': seller.pack,
-            'pack_uom': seller.pack_uom,
-            'variable_density': seller.variable_density,
+            'purchase_uom': (seller and seller.purchase_uom.id) or self.product_uom,
+            'pack': (seller and seller.pack) or 1,
+            'pack_uom': (seller and seller.pack_uom) or self.product_uom.name,
+            'variable_density': (seller and seller.variable_density) or False,
         })
 
     @api.one
     @api.constrains('pack', 'supplier_qty')
     def _check_pack_supplier_qty_relation(self):
-        if self.supplier_qty % self.pack != 0:
+        seller = self.product_id._select_seller(
+            partner_id=self.partner_id,
+            quantity=self.product_qty,
+            date=self.order_id.date_order and self.order_id.date_order[:10],
+            uom_id=self.product_uom)
+        if seller and self.supplier_qty % self.pack != 0:
             raise ValidationError(_('The Supplier Qty of {} must be pack multiple.'.format(self.product_id.name)))
